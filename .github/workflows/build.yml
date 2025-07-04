@@ -24,6 +24,11 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
+    - name: Setup Gradle Wrapper
+      run: |
+        gradle wrapper --gradle-version 8.4
+        chmod +x gradlew
+        
     - name: Cache Gradle packages
       uses: actions/cache@v3
       with:
@@ -34,9 +39,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
           
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
     - name: Build Debug APK
       run: ./gradlew assembleDebug
       
@@ -62,24 +64,32 @@ jobs:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
         body: |
-          ## Camera Interceptor LSPosed Module
+          ## Camera Network Interceptor LSPosed Module
           
           ### Features:
-          - Intercepts Camera API calls (Camera1 & Camera2)
-          - Monitors network requests to `/camera/useTimeCode`
-          - Supports OkHttp and Retrofit detection
+          - Intercepts network calls to `/camera/useTimeCode` from any IP/domain
+          - Monitors HTTP & HTTPS requests
+          - Supports OkHttp, Retrofit, HttpURLConnection, and more
           - Logs all intercepted calls to Xposed logs
+          - Dynamic response modification with current timestamps
           
           ### Installation:
           1. Install LSPosed framework
           2. Install this APK
           3. Enable module in LSPosed
-          4. Reboot device
+          4. Add target apps to scope
+          5. Reboot device
           
           ### Usage:
           - Check Xposed logs for intercepted calls
-          - Look for "CameraInterceptor" tag in logs
-          - Monitor target apps that use camera APIs
+          - Look for "CameraNetworkInterceptor" tag in logs
+          - Monitor target apps that make calls to `/camera/useTimeCode`
+          
+          ### Response Modification:
+          - Updates 'now' to current Unix timestamp
+          - Sets 'expiredTime' to year 2099 (4102444800000)
+          - Extends 'remain' time to 999999
+          - Ensures success response codes
           
         files: |
           app/build/outputs/apk/debug/app-debug.apk
