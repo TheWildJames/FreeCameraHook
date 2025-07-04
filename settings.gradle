@@ -10,6 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Add JitPack repository for Xposed API
+        maven { url 'https://jitpack.io' }
+        // Add alternative repository for Xposed
+        maven { url 'https://api.xposed.info/' }
     }
 }
 

@@ -35,7 +35,12 @@ android {
 }
 
 dependencies {
+    // Use provided scope for Xposed API (it's provided by the framework at runtime)
     compileOnly 'de.robv.android.xposed:api:82'
+    
+    // Alternative if the above doesn't work - use a different version or source
+    // compileOnly 'com.github.rovo89:XposedBridge:art'
+    
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
